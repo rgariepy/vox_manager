@@ -1,0 +1,9 @@
+<launch>
+
+  <node name="recognizer" pkg="pocketsphinx" type="recognizer.py">
+    <param name="lm" value="$(find vox_manager)/config/4501.lm"/>
+    <param name="dict" value="$(find vox_manager)/config/4501.dic"/>
+  </node>
+
+
+</launch>
