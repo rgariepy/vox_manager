@@ -5,5 +5,7 @@
     <param name="dict" value="$(find vox_manager)/config/4501.dic"/>
   </node>
 
+  <node name="vox_sequencer" pkg="vox_manager" type="vox_sequencer.py" output="screen"/>
+
 
 </launch>

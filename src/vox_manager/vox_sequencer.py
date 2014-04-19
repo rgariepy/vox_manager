@@ -1,80 +1,59 @@
 #!/usr/bin/env python
 
 """
-voice_cmd_vel.py is a simple demo of speech recognition.
-  You can control a mobile base using commands found
-  in the corpus file.
+vox_sequencer.py searches for a single command continuously using pocketsphinx
+Once found, it acknowledges and then switches to a more complex speech
+recognition engine (Google API)
+
+Right now, pocketsphinx is only looking for the word "computer"
+
+TODO: Switch to a more complex speech recognition engine
 """
 
-import roslib; roslib.load_manifest('pocketsphinx')
+import roslib; roslib.load_manifest('vox_manager')
 import rospy
 import math
 
-from geometry_msgs.msg import Twist
 from std_msgs.msg import String
 
-class voice_cmd_vel:
+class vox_sequencer:
+    """
+    State Machine:
+    0 - Waiting for trigger
+        Transition: Trigger spotted (via topic)
+        Action: Disable pocketsphinx, acknowledge, go to 1
+    1 - Triggered, recognizing full command
+        Transition: Command retrieved | N s timeout
+        Action: Enable pocketsphinx, go to 0
+    """
 
     def __init__(self):
         rospy.on_shutdown(self.cleanup)
-        self.speed = 0.2
-        self.msg = Twist()
+        self.state = 0 
+        self.ack_ = String()
 
-        # publish to cmd_vel, subscribe to speech output
-        self.pub_ = rospy.Publisher('cmd_vel', Twist)
+        # Subscribe to pocketsphinx output, publish to vox synthesis
         rospy.Subscriber('recognizer/output', String, self.speechCb)
+        self.pub_ack_ = rospy.Publisher('speech', String)
 
         r = rospy.Rate(10.0)
         while not rospy.is_shutdown():
-            self.pub_.publish(self.msg)
             r.sleep()
         
     def speechCb(self, msg):
         rospy.loginfo(msg.data)
 
-        if msg.data.find("full speed") > -1:
-            if self.speed == 0.2:
-                self.msg.linear.x = self.msg.linear.x*2
-                self.msg.angular.z = self.msg.angular.z*2
-                self.speed = 0.4
-        if msg.data.find("half speed") > -1:
-            if self.speed == 0.4:
-                self.msg.linear.x = self.msg.linear.x/2
-                self.msg.angular.z = self.msg.angular.z/2
-                self.speed = 0.2
-
-        if msg.data.find("forward") > -1:    
-            self.msg.linear.x = self.speed
-            self.msg.angular.z = 0
-        elif msg.data.find("left") > -1:
-            if self.msg.linear.x != 0:
-                if self.msg.angular.z < self.speed:
-                    self.msg.angular.z += 0.05
-            else:        
-                self.msg.angular.z = self.speed*2
-        elif msg.data.find("right") > -1:    
-            if self.msg.linear.x != 0:
-                if self.msg.angular.z > -self.speed:
-                    self.msg.angular.z -= 0.05
-            else:        
-                self.msg.angular.z = -self.speed*2
-        elif msg.data.find("back") > -1:
-            self.msg.linear.x = -self.speed
-            self.msg.angular.z = 0
-        elif msg.data.find("stop") > -1 or msg.data.find("halt") > -1:          
-            self.msg = Twist()
-        
-        self.pub_.publish(self.msg)
+        if msg.data.find("computer") > -1:
+            self.ack_.data = "Online"
+            self.pub_ack_.publish(self.ack_)
 
     def cleanup(self):
-        # stop the robot!
-        twist = Twist()
-        self.pub_.publish(twist)
+        pass
 
 if __name__=="__main__":
-    rospy.init_node('voice_cmd_vel')
+    rospy.init_node('vox_sequencer')
     try:
-        voice_cmd_vel()
+        vox_sequencer()
     except:
         pass
 
