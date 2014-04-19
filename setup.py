@@ -14,7 +14,7 @@ from catkin_pkg.python_setup import generate_distutils_setup
 setup_args = generate_distutils_setup(
     packages=['vox_manager'],
     package_dir={'':'src'},
-    scripts=['src/vox_manager/vox_sequencer.py'],
+    scripts=['src/vox_manager/vox_sequencer.py','src/vox_manager/gspeech.py'],
     requires=['std_msgs', 'rospy', 'diagnostic_updater']
 )
 

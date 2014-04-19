@@ -7,6 +7,7 @@ project(vox_manager)
 find_package(catkin REQUIRED COMPONENTS
     rospy
     std_msgs
+    std_srvs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -121,7 +122,8 @@ include_directories(
 
 ## Mark executable scripts (Python etc.) for installation
 install(PROGRAMS
-   src/vox_maanger/vox_sequencer.py
+   src/vox_manager/vox_sequencer.py
+   src/vox_manager/gspeech.py
    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 

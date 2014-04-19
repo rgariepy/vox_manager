@@ -1,11 +1,11 @@
 <launch>
 
-  <node name="recognizer" pkg="pocketsphinx" type="recognizer.py">
+  <node name="monitor" pkg="pocketsphinx" type="recognizer.py">
     <param name="lm" value="$(find vox_manager)/config/4501.lm"/>
     <param name="dict" value="$(find vox_manager)/config/4501.dic"/>
   </node>
+  <!-- <node name="recognizer" pkg="vox_manager" type="gspeech.py" output="screen"/> -->
 
   <node name="vox_sequencer" pkg="vox_manager" type="vox_sequencer.py" output="screen"/>
-
 
 </launch>
