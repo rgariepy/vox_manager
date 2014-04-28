@@ -40,11 +40,6 @@ class vox_sequencer:
         self.ack_ = String()
         self.timeout_ = rospy.get_param("timeout",5)    # [s] Time before we switch back to monitoring mode
 
-        # Subscribe to speech rec output, publish to vox synthesis
-        rospy.Subscriber('monitor/output', String, self.speechMonitor)
-        rospy.Subscriber('recognizer/output', String, self.speechRecognizer)
-        self.pub_ack_ = rospy.Publisher('speech', String)
-
         # Wait for services
         rospy.wait_for_service('monitor/start')
         rospy.wait_for_service('monitor/stop')
@@ -54,6 +49,16 @@ class vox_sequencer:
         self.mon_stop_svc_ = rospy.ServiceProxy('monitor/stop', Empty)
         self.rec_start_svc_ = rospy.ServiceProxy('recognizer/start', Empty)
         self.rec_stop_svc_ = rospy.ServiceProxy('recognizer/stop', Empty)
+
+        # Disable recog and enable monitoring
+        self.mon_start_svc_()
+        self.rec_stop_svc_()
+
+        # Subscribe to speech rec output, publish to vox synthesis
+        rospy.Subscriber('monitor/output', String, self.speechMonitor)
+        rospy.Subscriber('recognizer/output', String, self.speechRecognizer)
+        self.pub_ack_ = rospy.Publisher('speech', String)
+        rospy.loginfo("VOX Manager initialized")
 
         r = rospy.Rate(10.0)
         while not rospy.is_shutdown():
@@ -81,14 +86,16 @@ class vox_sequencer:
         """
         rospy.loginfo("Recognition: %s",msg.data)
         # Stop timer from firing later, we've succeeded
-        self.timeout_timer_.shutdown()
+        # RYANNOTE: Nope, leave recognition going - time it out only
+        # This will allow for continuous recognition
+        #self.timeout_timer_.shutdown()
         # Disable recog and enable monitoring
-        self.mon_start_svc_()
-        self.rec_stop_svc_()
+        #self.mon_start_svc_()
+        #self.rec_stop_svc_()
+        #self.state_ = 0;
 
-        self.state_ = 0;
-        self.ack_.data = "Success"
-        self.pub_ack_.publish(self.ack_)
+        #self.ack_.data = "Success"
+        #self.pub_ack_.publish(self.ack_)
 
     def timerCallback(self, event):
         """
@@ -99,8 +106,7 @@ class vox_sequencer:
         self.rec_stop_svc_()
 
         self.state_ = 0;
-        self.ack_.data = "Timeout"
-        self.pub_ack_.publish(self.ack_)
+        rospy.loginfo("Recognition timeout")
 
     def cleanup(self):
         pass

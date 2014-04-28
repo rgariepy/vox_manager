@@ -1,0 +1,76 @@
+Language model created by QuickLM on Sun Apr 27 21:30:56 EDT 2014
+Copyright (c) 1996-2010 Carnegie Mellon University and Alexander I. Rudnicky
+
+The model is in standard ARPA format, designed by Doug Paul while he was at MITRE.
+
+The code that was used to produce this language model is available in Open Source.
+Please visit http://www.speech.cs.cmu.edu/tools/ for more information
+
+The (fixed) discount mass is 0.5. The backoffs are computed using the ratio method.
+This model based on a corpus of 11 sentences and 14 words
+
+\data\
+ngram 1=14
+ngram 2=23
+ngram 3=16
+
+\1-grams:
+-0.8394 </s> -0.3010
+-0.8394 <s> -0.2331
+-1.8808 ALL -0.2331
+-1.8808 BAROQUE -0.2331
+-1.8808 BEDROOM -0.2331
+-1.8808 CELTIC -0.2331
+-1.8808 LIVING -0.2953
+-1.8808 MUTE -0.2331
+-1.8808 OFFICE -0.2331
+-1.8808 PAUSE -0.2331
+-1.1818 PLAY -0.2055
+-1.8808 ROCK -0.2331
+-1.8808 ROOM -0.2331
+-1.8808 UNMUTE -0.2331
+
+\2-grams:
+-1.3424 <s> BAROQUE 0.0000
+-1.3424 <s> CELTIC 0.0000
+-1.3424 <s> MUTE 0.0000
+-1.3424 <s> PAUSE 0.0000
+-0.6435 <s> PLAY 0.0000
+-1.3424 <s> ROCK 0.0000
+-1.3424 <s> UNMUTE 0.0000
+-0.3010 ALL </s> -0.3010
+-0.3010 BAROQUE </s> -0.3010
+-0.3010 BEDROOM </s> -0.3010
+-0.3010 CELTIC </s> -0.3010
+-0.3010 LIVING ROOM 0.0000
+-0.3010 MUTE </s> -0.3010
+-0.3010 OFFICE </s> -0.3010
+-0.3010 PAUSE </s> -0.3010
+-1.0000 PLAY </s> -0.3010
+-1.0000 PLAY ALL 0.0000
+-1.0000 PLAY BEDROOM 0.0000
+-1.0000 PLAY LIVING 0.0000
+-1.0000 PLAY OFFICE 0.0000
+-0.3010 ROCK </s> -0.3010
+-0.3010 ROOM </s> -0.3010
+-0.3010 UNMUTE </s> -0.3010
+
+\3-grams:
+-0.3010 <s> BAROQUE </s>
+-0.3010 <s> CELTIC </s>
+-0.3010 <s> MUTE </s>
+-0.3010 <s> PAUSE </s>
+-1.0000 <s> PLAY </s>
+-1.0000 <s> PLAY ALL
+-1.0000 <s> PLAY BEDROOM
+-1.0000 <s> PLAY LIVING
+-1.0000 <s> PLAY OFFICE
+-0.3010 <s> ROCK </s>
+-0.3010 <s> UNMUTE </s>
+-0.3010 LIVING ROOM </s>
+-0.3010 PLAY ALL </s>
+-0.3010 PLAY BEDROOM </s>
+-0.3010 PLAY LIVING ROOM
+-0.3010 PLAY OFFICE </s>
+
+\end\
